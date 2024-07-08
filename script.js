@@ -199,18 +199,24 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateCharts(totalIncome, totalExpenses) {
         const incomeData = [];
         const expenseData = [];
+        const incomeLabels = [];
+        const expenseLabels = [];
 
-        incomeCategories.forEach(input => {
+        incomeCategories.forEach((input, index) => {
             incomeData.push(parseFloat(input.value) || 0);
+            const label = input.previousElementSibling.value || `Income ${index + 1}`;
+            incomeLabels.push(label);
         });
 
-        expenseCategories.forEach(input => {
+        expenseCategories.forEach((input, index) => {
             expenseData.push(parseFloat(input.value) || 0);
+            const label = input.previousElementSibling.value || `Expense ${index + 1}`;
+            expenseLabels.push(label);
         });
 
         // Update budget distribution pie chart
-        budgetChart.data.labels = incomeCategories.map((_, i) => `Income ${i + 1}`).concat(expenseCategories.map((_, i) => `Expense ${i + 1}`));
-        budgetChart.data.datasets[0].data = incomeData.concat(expenseData);
+        budgetChart.data.labels = [...incomeLabels, ...expenseLabels];
+        budgetChart.data.datasets[0].data = [...incomeData, ...expenseData];
         budgetChart.update();
 
         // Update line chart
@@ -219,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function() {
         lineChart.update();
 
         // Update bar chart
-        barChart.data.labels = incomeCategories.map((_, i) => `Income ${i + 1}`).concat(expenseCategories.map((_, i) => `Expense ${i + 1}`));
+        barChart.data.labels = [...incomeLabels, ...expenseLabels];
         barChart.data.datasets[0].data = incomeData;
         barChart.data.datasets[1].data = expenseData;
         barChart.update();
