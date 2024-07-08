@@ -5,90 +5,92 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Business Budget Planner</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
-        <h1>Business Budget Planner (Template)</h1>
-        <div id="income-section">
+        <h1>Business Budget Planner (With sample data)</h1>
+        
+        <div id="income-section" class="section">
             <h2>Income</h2>
-            <!-- Default income categories with test data -->
             <div class="category">
-                <input type="text" value="Sales Revenue" readonly>
-                <input type="number" class="income-amount" value="50000" placeholder="Amount (ZAR)">
+                <input type="text" value="Sales Revenue">
+                <input type="number" class="income-amount" value="50000">
             </div>
             <div class="category">
-                <input type="text" value="Consulting Fees" readonly>
-                <input type="number" class="income-amount" value="20000" placeholder="Amount (ZAR)">
+                <input type="text" value="Consulting Fees">
+                <input type="number" class="income-amount" value="20000">
             </div>
             <div class="category">
-                <input type="text" value="Product Sales" readonly>
-                <input type="number" class="income-amount" value="30000" placeholder="Amount (ZAR)">
+                <input type="text" value="Product Sales">
+                <input type="number" class="income-amount" value="15000">
             </div>
             <div class="category">
-                <input type="text" value="Other Income" readonly>
-                <input type="number" class="income-amount" value="10000" placeholder="Amount (ZAR)">
+                <input type="text" value="Other Income">
+                <input type="number" class="income-amount" value="10000">
             </div>
+            <button id="add-income">Add Income Category</button>
         </div>
-        <button id="add-income">Add Income Category</button>
 
-        <div id="expense-section">
+        <div id="expense-section" class="section">
             <h2>Expenses</h2>
-            <!-- Default expense categories with test data -->
             <div class="category">
-                <input type="text" value="Salaries & Wages" readonly>
-                <input type="number" class="expense-amount" value="25000" placeholder="Amount (ZAR)">
+                <input type="text" value="Salaries & Wages">
+                <input type="number" class="expense-amount" value="25000">
             </div>
             <div class="category">
-                <input type="text" value="Rent/Lease Payments" readonly>
-                <input type="number" class="expense-amount" value="15000" placeholder="Amount (ZAR)">
+                <input type="text" value="Rent/Lease Payments">
+                <input type="number" class="expense-amount" value="15000">
             </div>
             <div class="category">
-                <input type="text" value="Utilities" readonly>
-                <input type="number" class="expense-amount" value="5000" placeholder="Amount (ZAR)">
+                <input type="text" value="Utilities">
+                <input type="number" class="expense-amount" value="5000">
             </div>
             <div class="category">
-                <input type="text" value="Advertising & Marketing" readonly>
-                <input type="number" class="expense-amount" value="4000" placeholder="Amount (ZAR)">
+                <input type="text" value="Advertising & Marketing">
+                <input type="number" class="expense-amount" value="7000">
             </div>
             <div class="category">
-                <input type="text" value="Insurance" readonly>
-                <input type="number" class="expense-amount" value="3000" placeholder="Amount (ZAR)">
+                <input type="text" value="Insurance">
+                <input type="number" class="expense-amount" value="2000">
             </div>
             <div class="category">
-                <input type="text" value="Office Supplies" readonly>
-                <input type="number" class="expense-amount" value="2000" placeholder="Amount (ZAR)">
+                <input type="text" value="Office Supplies">
+                <input type="number" class="expense-amount" value="3000">
             </div>
             <div class="category">
-                <input type="text" value="Travel Expenses" readonly>
-                <input type="number" class="expense-amount" value="3500" placeholder="Amount (ZAR)">
+                <input type="text" value="Travel Expenses">
+                <input type="number" class="expense-amount" value="4000">
             </div>
             <div class="category">
-                <input type="text" value="Equipment Purchases" readonly>
-                <input type="number" class="expense-amount" value="7000" placeholder="Amount (ZAR)">
+                <input type="text" value="Equipment Purchases">
+                <input type="number" class="expense-amount" value="7000">
             </div>
             <div class="category">
-                <input type="text" value="Taxes" readonly>
-                <input type="number" class="expense-amount" value="8000" placeholder="Amount (ZAR)">
+                <input type="text" value="Taxes">
+                <input type="number" class="expense-amount" value="3000">
             </div>
             <div class="category">
-                <input type="text" value="Other Expenses" readonly>
-                <input type="number" class="expense-amount" value="6000" placeholder="Amount (ZAR)">
+                <input type="text" value="Other Expenses">
+                <input type="number" class="expense-amount" value="6000">
             </div>
+            <button id="add-expense">Add Expense Category</button>
         </div>
-        <button id="add-expense">Add Expense Category</button>
 
-        <div id="summary">
+        <div class="section">
             <h2>Summary</h2>
-            <div>Total Income: <span id="total-income">R0.00</span></div>
-            <div>Total Expenses: <span id="total-expenses">R0.00</span></div>
-            <div>Net Profit/Loss: <span id="net-profit">R0.00</span></div>
-            <div>Profit Margin (%): <span id="profit-margin">0.00%</span></div>
+            <p>Total Income: <span id="total-income">R0.00</span></p>
+            <p>Total Expenses: <span id="total-expenses">R0.00</span></p>
+            <p>Net Profit/Loss: <span id="net-profit">R0.00</span></p>
+            <p>Profit Margin (%): <span id="profit-margin">0.00%</span></p>
         </div>
 
-        <canvas id="budget-chart"></canvas>
+        <div class="section">
+            <h2>Budget Distribution</h2>
+            <canvas id="budget-chart"></canvas>
+        </div>
     </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script src="script.js"></script>
 </body>
 </html>
