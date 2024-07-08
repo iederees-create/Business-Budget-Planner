@@ -18,6 +18,26 @@ h1 {
     margin-bottom: 20px;
 }
 
+h2 {
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 10px;
+}
+
+.category {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.category input[type="text"] {
+    flex: 2;
+    margin-right: 10px;
+}
+
+.category input[type="number"] {
+    flex: 1;
+}
+
 #summary {
     margin-top: 20px;
     border-top: 2px solid #ccc;
