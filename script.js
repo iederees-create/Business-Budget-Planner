@@ -98,10 +98,142 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Function to calculate and update summary
+    // Line chart initialization
+    const ctxLine = document.getElementById('line-chart').getContext('2d');
+    const lineChart = new Chart(ctxLine, {
+        type: 'line',
+        data: {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            datasets: [{
+                label: 'Income',
+                data: [],
+                borderColor: 'rgba(54, 162, 235, 1)',
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                fill: true,
+            }, {
+                label: 'Expenses',
+                data: [],
+                borderColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                fill: true,
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Income & Expenses Over Time'
+                }
+            }
+        }
+    });
+
+    // Bar chart initialization
+    const ctxBar = document.getElementById('bar-chart').getContext('2d');
+    const barChart = new Chart(ctxBar, {
+        type: 'bar',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Income',
+                data: [],
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }, {
+                label: 'Expenses',
+                data: [],
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Income vs Expenses Comparison'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Function to calculate and update summary and charts
     function updateSummary() {
         let totalIncome = 0;
         let totalExpenses = 0;
 
         incomeCategories.forEach(input => {
-            totalIncome += parseFloat
+            totalIncome += parseFloat(input.value) || 0;
+        });
+
+        expenseCategories.forEach(input => {
+            totalExpenses += parseFloat(input.value) || 0;
+        });
+
+        const netProfit = totalIncome - totalExpenses;
+        const profitMargin = totalIncome ? (netProfit / totalIncome) * 100 : 0;
+
+        document.getElementById('total-income').innerText = `R${totalIncome.toFixed(2)}`;
+        document.getElementById('total-expenses').innerText = `R${totalExpenses.toFixed(2)}`;
+        document.getElementById('net-profit').innerText = `R${netProfit.toFixed(2)}`;
+        document.getElementById('profit-margin').innerText = `${profitMargin.toFixed(2)}%`;
+
+        updateCharts(totalIncome, totalExpenses);
+    }
+
+    // Function to update charts
+    function updateCharts(totalIncome, totalExpenses) {
+        const incomeData = [];
+        const expenseData = [];
+
+        incomeCategories.forEach(input => {
+            incomeData.push(parseFloat(input.value) || 0);
+        });
+
+        expenseCategories.forEach(input => {
+            expenseData.push(parseFloat(input.value) || 0);
+        });
+
+        // Update budget distribution pie chart
+        budgetChart.data.labels = incomeCategories.map((_, i) => `Income ${i + 1}`).concat(expenseCategories.map((_, i) => `Expense ${i + 1}`));
+        budgetChart.data.datasets[0].data = incomeData.concat(expenseData);
+        budgetChart.update();
+
+        // Update line chart
+        lineChart.data.datasets[0].data = incomeData;
+        lineChart.data.datasets[1].data = expenseData;
+        lineChart.update();
+
+        // Update bar chart
+        barChart.data.labels = incomeCategories.map((_, i) => `Income ${i + 1}`).concat(expenseCategories.map((_, i) => `Expense ${i + 1}`));
+        barChart.data.datasets[0].data = incomeData;
+        barChart.data.datasets[1].data = expenseData;
+        barChart.update();
+    }
+
+    // Add initial event listeners for existing input fields
+    incomeCategories.forEach(input => {
+        input.addEventListener('input', updateSummary);
+    });
+
+    expenseCategories.forEach(input => {
+        input.addEventListener('input', updateSummary);
+    });
+
+    // Initial summary update
+    updateSummary();
+});
