@@ -1,7 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize empty arrays for income and expense categories
-    let incomeCategories = [];
-    let expenseCategories = [];
+    // Initialize arrays with initial income and expense inputs
+    const incomeInputs = document.querySelectorAll('.income-amount');
+    const expenseInputs = document.querySelectorAll('.expense-amount');
+
+    let incomeCategories = Array.from(incomeInputs);
+    let expenseCategories = Array.from(expenseInputs);
 
     // Function to add income category input fields
     function addIncomeCategory() {
@@ -19,6 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
         newDiv.appendChild(newInputAmount);
         incomeSection.appendChild(newDiv);
         incomeCategories.push(newInputAmount);
+        newInputAmount.addEventListener('input', updateSummary);
     }
 
     // Function to add expense category input fields
@@ -37,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
         newDiv.appendChild(newInputAmount);
         expenseSection.appendChild(newDiv);
         expenseCategories.push(newInputAmount);
+        newInputAmount.addEventListener('input', updateSummary);
     }
 
     // Event listeners for adding categories
@@ -65,13 +70,4 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('total-expenses').textContent = totalExpenses.toLocaleString('en-ZA', { style: 'currency', currency: 'ZAR' });
 
         const netProfit = totalIncome - totalExpenses;
-        document.getElementById('net-profit').textContent = netProfit.toLocaleString('en-ZA', { style: 'currency', currency: 'ZAR' });
-
-        const profitMargin = totalIncome > 0 ? (netProfit / totalIncome) * 100 : 0;
-        document.getElementById('profit-margin').textContent = profitMargin.toFixed(2) + '%';
-
-        // Update Chart
-        updateChart(totalIncome, totalExpenses);
-    }
-
-    //
+        document.getElementById('net-profit').textContent = netProfit.toLocaleString('en-Z
