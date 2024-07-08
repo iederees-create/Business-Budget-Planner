@@ -1,8 +1,40 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Your existing code...
+    const incomeSection = document.getElementById('income-section');
+    const expenseSection = document.getElementById('expense-section');
+    const totalIncomeEl = document.getElementById('total-income');
+    const totalExpensesEl = document.getElementById('total-expenses');
+    const netProfitLossEl = document.getElementById('net-profit-loss');
+    const profitMarginEl = document.getElementById('profit-margin');
+    const addIncomeCategoryBtn = document.getElementById('add-income-category');
+    const addExpenseCategoryBtn = document.getElementById('add-expense-category');
+    const incomeAmountEls = document.querySelectorAll('.income-amount');
+    const expenseAmountEls = document.querySelectorAll('.expense-amount');
 
-    // Handle file upload
+    let incomeCategories = [...incomeAmountEls];
+    let expenseCategories = [...expenseAmountEls];
+
+    incomeCategories.forEach(el => el.addEventListener('input', updateSummary));
+    expenseCategories.forEach(el => el.addEventListener('input', updateSummary));
+
+    addIncomeCategoryBtn.addEventListener('click', () => addCategory(incomeSection, incomeCategories, 'income'));
+    addExpenseCategoryBtn.addEventListener('click', () => addCategory(expenseSection, expenseCategories, 'expense'));
+
     document.getElementById('file-upload').addEventListener('change', handleFileUpload);
+
+    function addCategory(section, categories, type) {
+        const newDiv = document.createElement('div');
+        newDiv.className = 'category';
+        const newInputCategory = document.createElement('input');
+        newInputCategory.type = 'text';
+        const newInputAmount = document.createElement('input');
+        newInputAmount.type = 'number';
+        newInputAmount.className = type + '-amount';
+        newDiv.appendChild(newInputCategory);
+        newDiv.appendChild(newInputAmount);
+        section.appendChild(newDiv);
+        categories.push(newInputAmount);
+        newInputAmount.addEventListener('input', updateSummary);
+    }
 
     function handleFileUpload(event) {
         const file = event.target.files[0];
@@ -12,17 +44,14 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = new Uint8Array(e.target.result);
             const workbook = XLSX.read(data, { type: 'array' });
 
-            // Parse income data
             const incomeSheet = workbook.Sheets['Income'];
             const incomeData = XLSX.utils.sheet_to_json(incomeSheet, { header: 1 });
             processIncomeData(incomeData);
 
-            // Parse expense data
             const expenseSheet = workbook.Sheets['Expenses'];
             const expenseData = XLSX.utils.sheet_to_json(expenseSheet, { header: 1 });
             processExpenseData(expenseData);
 
-            // Update summary and charts
             updateSummary();
         };
 
@@ -30,57 +59,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function processIncomeData(data) {
-        const incomeSection = document.getElementById('income-section');
-        incomeSection.innerHTML = ''; // Clear existing inputs
+        incomeSection.innerHTML = '<h2>Income</h2>';
         incomeCategories = [];
 
-        data.slice(1).forEach((row, index) => {
-            if (row.length >= 2) {
-                const [category, amount] = row;
-                const newDiv = document.createElement('div');
-                newDiv.className = 'category';
-                const newInputCategory = document.createElement('input');
-                newInputCategory.type = 'text';
-                newInputCategory.value = category;
-                const newInputAmount = document.createElement('input');
-                newInputAmount.type = 'number';
-                newInputAmount.className = 'income-amount';
-                newInputAmount.value = amount;
-                newDiv.appendChild(newInputCategory);
-                newDiv.appendChild(newInputAmount);
-                incomeSection.appendChild(newDiv);
-                incomeCategories.push(newInputAmount);
-                newInputAmount.addEventListener('input', updateSummary);
-            }
-        });
-    }
-
-    function processExpenseData(data) {
-        const expenseSection = document.getElementById('expense-section');
-        expenseSection.innerHTML = ''; // Clear existing inputs
-        expenseCategories = [];
-
-        data.slice(1).forEach((row, index) => {
-            if (row.length >= 2) {
-                const [category, amount] = row;
-                const newDiv = document.createElement('div');
-                newDiv.className = 'category';
-                const newInputCategory = document.createElement('input');
-                newInputCategory.type = 'text';
-                newInputCategory.value = category;
-                const newInputAmount = document.createElement('input');
-                newInputAmount.type = 'number';
-                newInputAmount.className = 'expense-amount';
-                newInputAmount.value = amount;
-                newDiv.appendChild(newInputCategory);
-                newDiv.appendChild(newInputAmount);
-                expenseSection.appendChild(newDiv);
-                expenseCategories.push(newInputAmount);
-                newInputAmount.addEventListener('input', updateSummary);
-            }
-        });
-    }
-
-    // Your existing updateSummary and updateCharts functions...
-
-});
+        data.slice(1).forEach((row) => {
+            if (
