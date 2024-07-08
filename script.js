@@ -99,4 +99,36 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Function to calculate and update summary
-   
+    function updateSummary() {
+        let totalIncome = 0;
+        let totalExpenses = 0;
+
+        incomeCategories.forEach(input => {
+            totalIncome += parseFloat(input.value) || 0;
+        });
+
+        expenseCategories.forEach(input => {
+            totalExpenses += parseFloat(input.value) || 0;
+        });
+
+        const netProfit = totalIncome - totalExpenses;
+        const profitMargin = totalIncome ? (netProfit / totalIncome) * 100 : 0;
+
+        document.getElementById('total-income').innerText = `R${totalIncome.toFixed(2)}`;
+        document.getElementById('total-expenses').innerText = `R${totalExpenses.toFixed(2)}`;
+        document.getElementById('net-profit').innerText = `R${netProfit.toFixed(2)}`;
+        document.getElementById('profit-margin').innerText = `${profitMargin.toFixed(2)}%`;
+
+        // Update chart data
+        budgetChart.data.labels = [...Array.from(document.querySelectorAll('#income-section .category input[type="text"]')).map(input => input.value), ...Array.from(document.querySelectorAll('#expense-section .category input[type="text"]')).map(input => input.value)];
+        budgetChart.data.datasets[0].data = [...Array.from(incomeCategories).map(input => parseFloat(input.value) || 0), ...Array.from(expenseCategories).map(input => parseFloat(input.value) || 0)];
+        budgetChart.update();
+    }
+
+    // Add event listeners to initial inputs
+    incomeInputs.forEach(input => input.addEventListener('input', updateSummary));
+    expenseInputs.forEach(input => input.addEventListener('input', updateSummary));
+
+    // Initial update of the summary
+    updateSummary();
+});
