@@ -10,26 +10,85 @@
     <div class="container">
         <h1>Business Budget Planner</h1>
         <div id="income-section">
-            <!-- Income categories will be dynamically added here -->
+            <h2>Income</h2>
+            <!-- Default income categories -->
+            <div class="category">
+                <input type="text" value="Sales Revenue" readonly>
+                <input type="number" class="income-amount" placeholder="Amount (ZAR)">
+            </div>
+            <div class="category">
+                <input type="text" value="Consulting Fees" readonly>
+                <input type="number" class="income-amount" placeholder="Amount (ZAR)">
+            </div>
+            <div class="category">
+                <input type="text" value="Product Sales" readonly>
+                <input type="number" class="income-amount" placeholder="Amount (ZAR)">
+            </div>
+            <div class="category">
+                <input type="text" value="Other Income" readonly>
+                <input type="number" class="income-amount" placeholder="Amount (ZAR)">
+            </div>
         </div>
         <button id="add-income">Add Income Category</button>
-        
+
         <div id="expense-section">
-            <!-- Expense categories will be dynamically added here -->
+            <h2>Expenses</h2>
+            <!-- Default expense categories -->
+            <div class="category">
+                <input type="text" value="Salaries & Wages" readonly>
+                <input type="number" class="expense-amount" placeholder="Amount (ZAR)">
+            </div>
+            <div class="category">
+                <input type="text" value="Rent/Lease Payments" readonly>
+                <input type="number" class="expense-amount" placeholder="Amount (ZAR)">
+            </div>
+            <div class="category">
+                <input type="text" value="Utilities" readonly>
+                <input type="number" class="expense-amount" placeholder="Amount (ZAR)">
+            </div>
+            <div class="category">
+                <input type="text" value="Advertising & Marketing" readonly>
+                <input type="number" class="expense-amount" placeholder="Amount (ZAR)">
+            </div>
+            <div class="category">
+                <input type="text" value="Insurance" readonly>
+                <input type="number" class="expense-amount" placeholder="Amount (ZAR)">
+            </div>
+            <div class="category">
+                <input type="text" value="Office Supplies" readonly>
+                <input type="number" class="expense-amount" placeholder="Amount (ZAR)">
+            </div>
+            <div class="category">
+                <input type="text" value="Travel Expenses" readonly>
+                <input type="number" class="expense-amount" placeholder="Amount (ZAR)">
+            </div>
+            <div class="category">
+                <input type="text" value="Equipment Purchases" readonly>
+                <input type="number" class="expense-amount" placeholder="Amount (ZAR)">
+            </div>
+            <div class="category">
+                <input type="text" value="Taxes" readonly>
+                <input type="number" class="expense-amount" placeholder="Amount (ZAR)">
+            </div>
+            <div class="category">
+                <input type="text" value="Other Expenses" readonly>
+                <input type="number" class="expense-amount" placeholder="Amount (ZAR)">
+            </div>
         </div>
         <button id="add-expense">Add Expense Category</button>
 
         <div id="summary">
             <h2>Summary</h2>
-            <div>Total Income: <span id="total-income"></span></div>
-            <div>Total Expenses: <span id="total-expenses"></span></div>
-            <div>Net Profit/Loss: <span id="net-profit"></span></div>
-            <div>Profit Margin (%): <span id="profit-margin"></span></div>
+            <div>Total Income: <span id="total-income">R0.00</span></div>
+            <div>Total Expenses: <span id="total-expenses">R0.00</span></div>
+            <div>Net Profit/Loss: <span id="net-profit">R0.00</span></div>
+            <div>Profit Margin (%): <span id="profit-margin">0.00%</span></div>
         </div>
 
         <canvas id="budget-chart"></canvas>
     </div>
     
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
