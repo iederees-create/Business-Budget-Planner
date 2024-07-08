@@ -6,21 +6,37 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to add income category input fields
     function addIncomeCategory() {
         const incomeSection = document.getElementById('income-section');
-        const newInput = document.createElement('input');
-        newInput.type = 'text';
-        newInput.placeholder = 'Enter Income Category';
-        incomeSection.appendChild(newInput);
-        incomeCategories.push(newInput);
+        const newDiv = document.createElement('div');
+        newDiv.className = 'category';
+        const newInputCategory = document.createElement('input');
+        newInputCategory.type = 'text';
+        newInputCategory.placeholder = 'Enter Income Category';
+        const newInputAmount = document.createElement('input');
+        newInputAmount.type = 'number';
+        newInputAmount.className = 'income-amount';
+        newInputAmount.placeholder = 'Amount (ZAR)';
+        newDiv.appendChild(newInputCategory);
+        newDiv.appendChild(newInputAmount);
+        incomeSection.appendChild(newDiv);
+        incomeCategories.push(newInputAmount);
     }
 
     // Function to add expense category input fields
     function addExpenseCategory() {
         const expenseSection = document.getElementById('expense-section');
-        const newInput = document.createElement('input');
-        newInput.type = 'text';
-        newInput.placeholder = 'Enter Expense Category';
-        expenseSection.appendChild(newInput);
-        expenseCategories.push(newInput);
+        const newDiv = document.createElement('div');
+        newDiv.className = 'category';
+        const newInputCategory = document.createElement('input');
+        newInputCategory.type = 'text';
+        newInputCategory.placeholder = 'Enter Expense Category';
+        const newInputAmount = document.createElement('input');
+        newInputAmount.type = 'number';
+        newInputAmount.className = 'expense-amount';
+        newInputAmount.placeholder = 'Amount (ZAR)';
+        newDiv.appendChild(newInputCategory);
+        newDiv.appendChild(newInputAmount);
+        expenseSection.appendChild(newDiv);
+        expenseCategories.push(newInputAmount);
     }
 
     // Event listeners for adding categories
@@ -53,26 +69,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const profitMargin = totalIncome > 0 ? (netProfit / totalIncome) * 100 : 0;
         document.getElementById('profit-margin').textContent = profitMargin.toFixed(2) + '%';
+
+        // Update Chart
+        updateChart(totalIncome, totalExpenses);
     }
 
-    // Call updateSummary on input change
-    document.addEventListener('input', updateSummary);
-
-    // Chart.js example for creating a pie chart
-    const ctx = document.getElementById('budget-chart').getContext('2d');
-    const myPieChart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: ['Income', 'Expenses'],
-            datasets: [{
-                label: 'Budget Overview',
-                data: [totalIncome, totalExpenses],
-                backgroundColor: ['#007bff', '#dc3545'],
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-        }
-    });
-});
+    //
