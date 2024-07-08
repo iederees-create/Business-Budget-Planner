@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Budget Planner</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Business Budget Planner</h1>
+        <div id="income-section">
+            <!-- Income categories will be dynamically added here -->
+        </div>
+        <button id="add-income">Add Income Category</button>
+        
+        <div id="expense-section">
+            <!-- Expense categories will be dynamically added here -->
+        </div>
+        <button id="add-expense">Add Expense Category</button>
+
+        <div id="summary">
+            <h2>Summary</h2>
+            <div>Total Income: <span id="total-income"></span></div>
+            <div>Total Expenses: <span id="total-expenses"></span></div>
+            <div>Net Profit/Loss: <span id="net-profit"></span></div>
+            <div>Profit Margin (%): <span id="profit-margin"></span></div>
+        </div>
+
+        <canvas id="budget-chart"></canvas>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
