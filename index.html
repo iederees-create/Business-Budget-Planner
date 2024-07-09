@@ -3,108 +3,309 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Budget Planner</title>
+    <title>Business Budget Planner & Product Catalog</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
-        <h1>Business Budget Planner (With sample data)</h1>
+        <header class="header">
+            <h1>Business Budget Planner & Product Catalog</h1>
+        </header>
 
-        <div id="income-section" class="section">
-            <h2>Income</h2>
-            <div class="category">
-                <input type="text" value="Sales Revenue">
-                <input type="number" class="income-amount" value="50000">
+        <!-- Business Budget Planner Section -->
+        <div id="budget-planner" class="section">
+            <h2>Business Budget Planner</h2>
+            <div id="income-section" class="section">
+                <h3>Income</h3>
+                <div class="category">
+                    <input type="text" value="Sales Revenue">
+                    <input type="number" class="income-amount" value="50000">
+                </div>
+                <!-- Additional income categories added dynamically -->
+                <button id="add-income">Add Income Category</button>
             </div>
-            <div class="category">
-                <input type="text" value="Consulting Fees">
-                <input type="number" class="income-amount" value="20000">
-            </div>
-            <div class="category">
-                <input type="text" value="Product Sales">
-                <input type="number" class="income-amount" value="15000">
-            </div>
-            <div class="category">
-                <input type="text" value="Other Income">
-                <input type="number" class="income-amount" value="10000">
-            </div>
-            <button id="add-income">Add Income Category</button>
-        </div>
 
-        <div id="expense-section" class="section">
-            <h2>Expenses</h2>
-            <div class="category">
-                <input type="text" value="Salaries & Wages">
-                <input type="number" class="expense-amount" value="25000">
+            <div id="expense-section" class="section">
+                <h3>Expenses</h3>
+                <div class="category">
+                    <input type="text" value="Salaries & Wages">
+                    <input type="number" class="expense-amount" value="25000">
+                </div>
+                <!-- Additional expense categories added dynamically -->
+                <button id="add-expense">Add Expense Category</button>
             </div>
-            <div class="category">
-                <input type="text" value="Rent/Lease Payments">
-                <input type="number" class="expense-amount" value="15000">
-            </div>
-            <div class="category">
-                <input type="text" value="Utilities">
-                <input type="number" class="expense-amount" value="5000">
-            </div>
-            <div class="category">
-                <input type="text" value="Advertising & Marketing">
-                <input type="number" class="expense-amount" value="7000">
-            </div>
-            <div class="category">
-                <input type="text" value="Insurance">
-                <input type="number" class="expense-amount" value="2000">
-            </div>
-            <div class="category">
-                <input type="text" value="Office Supplies">
-                <input type="number" class="expense-amount" value="3000">
-            </div>
-            <div class="category">
-                <input type="text" value="Travel Expenses">
-                <input type="number" class="expense-amount" value="4000">
-            </div>
-            <div class="category">
-                <input type="text" value="Equipment Purchases">
-                <input type="number" class="expense-amount" value="7000">
-            </div>
-            <div class="category">
-                <input type="text" value="Taxes">
-                <input type="number" class="expense-amount" value="3000">
-            </div>
-            <div class="category">
-                <input type="text" value="Other Expenses">
-                <input type="number" class="expense-amount" value="6000">
-            </div>
-            <button id="add-expense">Add Expense Category</button>
-        </div>
 
-        <div class="section">
-            <h2>Summary</h2>
-            <p>Total Income: <span id="total-income">R0.00</span></p>
-            <p>Total Expenses: <span id="total-expenses">R0.00</span></p>
-            <p>Net Profit/Loss: <span id="net-profit">R0.00</span></p>
-            <p>Profit Margin (%): <span id="profit-margin">0.00%</span></p>
-        </div>
+            <div class="summary">
+                <h3>Summary</h3>
+                <p>Total Income: <span id="total-income">R0.00</span></p>
+                <p>Total Expenses: <span id="total-expenses">R0.00</span></p>
+                <p>Net Profit/Loss: <span id="net-profit">R0.00</span></p>
+                <p>Profit Margin (%): <span id="profit-margin">0.00%</span></p>
+            </div>
 
-        <div class="section">
-            <h2>Budget Distribution</h2>
             <canvas id="budget-chart"></canvas>
-        </div>
-
-        <div class="section">
-            <h2>Income & Expenses Over Time</h2>
             <canvas id="line-chart"></canvas>
+            <canvas id="bar-chart"></canvas>
         </div>
 
-        <div class="section">
-            <h2>Income vs Expenses Comparison</h2>
-            <canvas id="bar-chart"></canvas>
+        <!-- Product Catalog Section -->
+        <div id="product-catalog" class="section">
+            <h2>Product Catalog</h2>
+            <table id="product-table">
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Description</th>
+                        <th>Features</th>
+                        <th>Price</th>
+                        <th>Link to Buy</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Product entries dynamically added here -->
+                </tbody>
+            </table>
         </div>
     </div>
 
-    <a href="https://wa.me/27845272182?text=" class="floating-whatsapp">
-        <img src="https://w7.pngwing.com/pngs/887/556/png-transparent-whatsapp-click-to-chat-button.png" alt="WhatsApp Chat">
-    </a>
-
     <script src="script.js"></script>
+    <script>
+        // Existing budget planner code here
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize arrays with initial income and expense inputs
+            const incomeInputs = document.querySelectorAll('.income-amount');
+            const expenseInputs = document.querySelectorAll('.expense-amount');
+        
+            let incomeCategories = Array.from(incomeInputs);
+            let expenseCategories = Array.from(expenseInputs);
+        
+            // Function to add income category input fields
+            function addIncomeCategory() {
+                const incomeSection = document.getElementById('income-section');
+                const newDiv = document.createElement('div');
+                newDiv.className = 'category';
+                const newInputCategory = document.createElement('input');
+                newInputCategory.type = 'text';
+                newInputCategory.placeholder = 'Enter Income Category';
+                const newInputAmount = document.createElement('input');
+                newInputAmount.type = 'number';
+                newInputAmount.className = 'income-amount';
+                newInputAmount.placeholder = 'Amount (ZAR)';
+                newDiv.appendChild(newInputCategory);
+                newDiv.appendChild(newInputAmount);
+                incomeSection.appendChild(newDiv);
+                incomeCategories.push(newInputAmount);
+                newInputAmount.addEventListener('input', updateSummary);
+            }
+        
+            // Function to add expense category input fields
+            function addExpenseCategory() {
+                const expenseSection = document.getElementById('expense-section');
+                const newDiv = document.createElement('div');
+                newDiv.className = 'category';
+                const newInputCategory = document.createElement('input');
+                newInputCategory.type = 'text';
+                newInputCategory.placeholder = 'Enter Expense Category';
+                const newInputAmount = document.createElement('input');
+                newInputAmount.type = 'number';
+                newInputAmount.className = 'expense-amount';
+                newInputAmount.placeholder = 'Amount (ZAR)';
+                newDiv.appendChild(newInputCategory);
+                newDiv.appendChild(newInputAmount);
+                expenseSection.appendChild(newDiv);
+                expenseCategories.push(newInputAmount);
+                newInputAmount.addEventListener('input', updateSummary);
+            }
+        
+            // Function to calculate and update the summary
+            function updateSummary() {
+                const totalIncome = incomeCategories.reduce((sum, input) => sum + Number(input.value), 0);
+                const totalExpenses = expenseCategories.reduce((sum, input) => sum + Number(input.value), 0);
+                const netProfit = totalIncome - totalExpenses;
+                const profitMargin = totalIncome > 0 ? (netProfit / totalIncome) * 100 : 0;
+        
+                document.getElementById('total-income').innerText = `R${totalIncome.toFixed(2)}`;
+                document.getElementById('total-expenses').innerText = `R${totalExpenses.toFixed(2)}`;
+                document.getElementById('net-profit').innerText = `R${netProfit.toFixed(2)}`;
+                document.getElementById('profit-margin').innerText = `${profitMargin.toFixed(2)}%`;
+        
+                updateChart(totalIncome, totalExpenses);
+                updateLineChart(incomeCategories, expenseCategories);
+                updateBarChart(totalIncome, totalExpenses);
+            }
+        
+            // Function to update the budget distribution chart
+            function updateChart(totalIncome, totalExpenses) {
+                const ctx = document.getElementById('budget-chart').getContext('2d');
+                if (window.budgetChart) {
+                    window.budgetChart.destroy();
+                }
+                window.budgetChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Income', 'Expenses'],
+                        datasets: [{
+                            data: [totalIncome, totalExpenses],
+                            backgroundColor: ['#36A2EB', '#FF6384']
+                        }]
+                    }
+                });
+            }
+        
+            // Function to update the income and expenses over time chart
+            function updateLineChart(incomeCategories, expenseCategories) {
+                const ctx = document.getElementById('line-chart').getContext('2d');
+                const incomeData = incomeCategories.map(input => Number(input.value));
+                const expenseData = expenseCategories.map(input => Number(input.value));
+                const labels = incomeCategories.map((_, index) => `Category ${index + 1}`);
+                
+                if (window.lineChart) {
+                    window.lineChart.destroy();
+                }
+                
+                window.lineChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'Income',
+                                data: incomeData,
+                                borderColor: '#36A2EB',
+                                fill: false
+                            },
+                            {
+                                label: 'Expenses',
+                                data: expenseData,
+                                borderColor: '#FF6384',
+                                fill: false
+                            }
+                        ]
+                    }
+                });
+            }
+        
+            // Function to update the income vs expenses comparison chart
+            function updateBarChart(totalIncome, totalExpenses) {
+                const ctx = document.getElementById('bar-chart').getContext('2d');
+                
+                if (window.barChart) {
+                    window.barChart.destroy();
+                }
+                
+                window.barChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Income', 'Expenses'],
+                        datasets: [{
+                            label: 'Amount (ZAR)',
+                            data: [totalIncome, totalExpenses],
+                            backgroundColor: ['#36A2EB', '#FF6384']
+                        }]
+                    }
+                });
+            }
+        
+            document.getElementById('add-income').addEventListener('click', addIncomeCategory);
+            document.getElementById('add-expense').addEventListener('click', addExpenseCategory);
+        
+            incomeCategories.forEach(input => input.addEventListener('input', updateSummary));
+            expenseCategories.forEach(input => input.addEventListener('input', updateSummary));
+        
+            updateSummary();
+        });
+
+        // Product catalog code here
+        document.addEventListener('DOMContentLoaded', function() {
+            const products = [
+                {
+                    name: 'Monthly Budget Planner',
+                    description: 'A comprehensive monthly budget planner to track income, expenses, and savings.',
+                    features: 'Income tracking, Expense tracking, Savings goal',
+                    price: '$10',
+                    url: 'Link to Buy'
+                },
+                {
+                    name: 'Cash Flow Statement',
+                    description: 'Monitor the cash flow in and out of your business.',
+                    features: 'Cash inflow, Cash outflow, Net cash flow',
+                    price: '$15',
+                    url: 'Link to Buy'
+                },
+                {
+                    name: 'Expense Tracker',
+                    description: 'Simple and accessible way to track daily expenses.',
+                    features: 'Expense logging, Categories, Summaries',
+                    price: '$8',
+                    url: 'Link to Buy'
+                },
+                {
+                    name: 'Sales and Revenue Tracker',
+                    description: 'Track sales performance and revenue over time.',
+                    features: 'Sales logging, Revenue tracking, Trend analysis',
+                    price: '$12',
+                    url: 'Link to Buy'
+                },
+                {
+                    name: 'Project Management Dashboard',
+                    description: 'Manage and track project progress, deadlines, and tasks.',
+                    features: 'Task tracking, Deadline management, Progress visualization',
+                    price: '$20',
+                    url: 'Link to Buy'
+                },
+                {
+                    name: 'KPI Dashboard',
+                    description: 'Visual dashboard to track key performance indicators (KPIs) and metrics.',
+                    features: 'KPI visualization, Metrics tracking, Trend analysis',
+                    price: '$18',
+                    url: 'Link to Buy'
+                },
+                {
+                    name: 'Inventory Management Template',
+                    description: 'Track inventory levels, purchases, and sales.',
+                    features: 'Stock levels, Purchases, Sales, Alerts for low stock',
+                    price: '$14',
+                    url: 'Link to Buy'
+                },
+                {
+                    name: 'Marketing Campaign Tracker',
+                    description: 'Plan, execute, and track marketing campaigns.',
+                    features: 'Campaign planning, Performance tracking, Analytics',
+                    price: '$16',
+                    url: 'Link to Buy'
+                },
+                {
+                    name: 'CRM Template',
+                    description: 'Manage customer information, interactions, and sales pipelines.',
+                    features: 'Customer data, Interaction logging, Sales pipeline',
+                    price: '$22',
+                    url: 'Link to Buy'
+                },
+                {
+                    name: 'Employee Timesheet Template',
+                    description: 'Log working hours and manage payroll.',
+                    features: 'Hour logging, Overtime calculation, Payroll management',
+                    price: '$10',
+                    url: 'Link to Buy'
+                }
+            ];
+
+            const productTable = document.getElementById('product-table');
+
+            products.forEach(product => {
+                const row = `
+                    <tr>
+                        <td>${product.name}</td>
+                        <td>${product.description}</td>
+                        <td>${product.features}</td>
+                        <td>${product.price}</td>
+                        <td><a href="${product.url}" target="_blank">${product.url}</a></td>
+                    </tr>
+                `;
+                productTable.innerHTML += row;
+            });
+        });
+    </script>
 </body>
 </html>
