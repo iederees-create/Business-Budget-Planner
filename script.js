@@ -44,206 +44,100 @@ document.addEventListener('DOMContentLoaded', function() {
         newInputAmount.addEventListener('input', updateSummary);
     }
 
-    // Event listeners for adding categories
-    document.getElementById('add-income').addEventListener('click', addIncomeCategory);
-    document.getElementById('add-expense').addEventListener('click', addExpenseCategory);
-
-    // Chart initialization
-    const ctx = document.getElementById('budget-chart').getContext('2d');
-    const budgetChart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: [],
-            datasets: [{
-                label: 'Budget Distribution',
-                data: [],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)',
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                title: {
-                    display: true,
-                    text: 'Budget Distribution'
-                }
-            }
-        }
-    });
-
-    // Line chart initialization
-    const ctxLine = document.getElementById('line-chart').getContext('2d');
-    const lineChart = new Chart(ctxLine, {
-        type: 'line',
-        data: {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-            datasets: [{
-                label: 'Income',
-                data: [],
-                borderColor: 'rgba(54, 162, 235, 1)',
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                fill: true,
-            }, {
-                label: 'Expenses',
-                data: [],
-                borderColor: 'rgba(255, 99, 132, 1)',
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                fill: true,
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                title: {
-                    display: true,
-                    text: 'Income & Expenses Over Time'
-                }
-            }
-        }
-    });
-
-    // Bar chart initialization
-    const ctxBar = document.getElementById('bar-chart').getContext('2d');
-    const barChart = new Chart(ctxBar, {
-        type: 'bar',
-        data: {
-            labels: [],
-            datasets: [{
-                label: 'Income',
-                data: [],
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
-            }, {
-                label: 'Expenses',
-                data: [],
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                title: {
-                    display: true,
-                    text: 'Income vs Expenses Comparison'
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-
-    // Function to calculate and update summary and charts
+    // Function to calculate and update the summary
     function updateSummary() {
-        let totalIncome = 0;
-        let totalExpenses = 0;
-
-        incomeCategories.forEach(input => {
-            totalIncome += parseFloat(input.value) || 0;
-        });
-
-        expenseCategories.forEach(input => {
-            totalExpenses += parseFloat(input.value) || 0;
-        });
-
+        const totalIncome = incomeCategories.reduce((sum, input) => sum + Number(input.value), 0);
+        const totalExpenses = expenseCategories.reduce((sum, input) => sum + Number(input.value), 0);
         const netProfit = totalIncome - totalExpenses;
-        const profitMargin = totalIncome ? (netProfit / totalIncome) * 100 : 0;
+        const profitMargin = totalIncome > 0 ? (netProfit / totalIncome) * 100 : 0;
 
         document.getElementById('total-income').innerText = `R${totalIncome.toFixed(2)}`;
         document.getElementById('total-expenses').innerText = `R${totalExpenses.toFixed(2)}`;
         document.getElementById('net-profit').innerText = `R${netProfit.toFixed(2)}`;
         document.getElementById('profit-margin').innerText = `${profitMargin.toFixed(2)}%`;
 
-        updateCharts(totalIncome, totalExpenses);
+        updateChart(totalIncome, totalExpenses);
+        updateLineChart(incomeCategories, expenseCategories);
+        updateBarChart(totalIncome, totalExpenses);
     }
 
-    // Function to update charts
-    function updateCharts(totalIncome, totalExpenses) {
-        const incomeData = [];
-        const expenseData = [];
-        const incomeLabels = [];
-        const expenseLabels = [];
-
-        incomeCategories.forEach((input, index) => {
-            incomeData.push(parseFloat(input.value) || 0);
-            const label = input.previousElementSibling.value || `Income ${index + 1}`;
-            incomeLabels.push(label);
+    // Function to update the budget distribution chart
+    function updateChart(totalIncome, totalExpenses) {
+        const ctx = document.getElementById('budget-chart').getContext('2d');
+        if (window.budgetChart) {
+            window.budgetChart.destroy();
+        }
+        window.budgetChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Income', 'Expenses'],
+                datasets: [{
+                    data: [totalIncome, totalExpenses],
+                    backgroundColor: ['#36A2EB', '#FF6384']
+                }]
+            }
         });
-
-        expenseCategories.forEach((input, index) => {
-            expenseData.push(parseFloat(input.value) || 0);
-            const label = input.previousElementSibling.value || `Expense ${index + 1}`;
-            expenseLabels.push(label);
-        });
-
-        // Update budget distribution pie chart
-        budgetChart.data.labels = [...incomeLabels, ...expenseLabels];
-        budgetChart.data.datasets[0].data = [...incomeData, ...expenseData];
-        budgetChart.update();
-
-        // Update line chart
-        lineChart.data.datasets[0].data = incomeData;
-        lineChart.data.datasets[1].data = expenseData;
-        lineChart.update();
-
-        // Update bar chart
-        barChart.data.labels = [...incomeLabels, ...expenseLabels];
-        barChart.data.datasets[0].data = incomeData;
-        barChart.data.datasets[1].data = expenseData;
-        barChart.update();
     }
 
-    // Add initial event listeners for existing input fields
-    incomeCategories.forEach(input => {
-        input.addEventListener('input', updateSummary);
-    });
+    // Function to update the income and expenses over time chart
+    function updateLineChart(incomeCategories, expenseCategories) {
+        const ctx = document.getElementById('line-chart').getContext('2d');
+        const incomeData = incomeCategories.map(input => Number(input.value));
+        const expenseData = expenseCategories.map(input => Number(input.value));
+        const labels = incomeCategories.map((_, index) => `Category ${index + 1}`);
+        
+        if (window.lineChart) {
+            window.lineChart.destroy();
+        }
+        
+        window.lineChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Income',
+                        data: incomeData,
+                        borderColor: '#36A2EB',
+                        fill: false
+                    },
+                    {
+                        label: 'Expenses',
+                        data: expenseData,
+                        borderColor: '#FF6384',
+                        fill: false
+                    }
+                ]
+            }
+        });
+    }
 
-    expenseCategories.forEach(input => {
-        input.addEventListener('input', updateSummary);
-    });
+    // Function to update the income vs expenses comparison chart
+    function updateBarChart(totalIncome, totalExpenses) {
+        const ctx = document.getElementById('bar-chart').getContext('2d');
+        
+        if (window.barChart) {
+            window.barChart.destroy();
+        }
+        
+        window.barChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Income', 'Expenses'],
+                datasets: [{
+                    label: 'Amount (ZAR)',
+                    data: [totalIncome, totalExpenses],
+                    backgroundColor: ['#36A2EB', '#FF6384']
+                }]
+            }
+        });
+    }
 
-    // Initial summary update
+    document.getElementById('add-income').addEventListener('click', addIncomeCategory);
+    document.getElementById('add-expense').addEventListener('click', addExpenseCategory);
+
+    incomeCategories.forEach(input => input.addEventListener('input', updateSummary));
+    expenseCategories.forEach(input => input.addEventListener('input', updateSummary));
+
     updateSummary();
-
-    // Floating WhatsApp icon
-    const whatsappIcon = document.createElement('a');
-    whatsappIcon.href = 'https://wa.me/27845272182?text=';
-   
+});
