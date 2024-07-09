@@ -133,60 +133,78 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Function to handle file upload
+    // Function to handle file upload and parse the budget data
     function handleFileUpload(event) {
         const file = event.target.files[0];
+        if (!file) return;
+
         const reader = new FileReader();
         reader.onload = function(e) {
-            const data = new Uint8Array(e.target.result);
-            const workbook = XLSX.read(data, { type: 'array' });
-            const sheet = workbook.Sheets['Budget Data'];
-            const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+            const data = e.target.result;
+            const workbook = XLSX.read(data, { type: 'binary' });
+            const sheetName = workbook.SheetNames[0];
+            const sheet = workbook.Sheets[sheetName];
+            const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
-            rows.slice(1).forEach(row => {
-                const [categoryType, categoryName, amount] = row;
-                if (categoryType === 'Income') {
-                    addCategory('income-section', categoryName, amount, 'income-amount', incomeCategories);
-                } else if (categoryType === 'Expense') {
-                    addCategory('expense-section', categoryName, amount, 'expense-amount', expenseCategories);
-                }
-            });
-
-            updateSummary();
+            parseBudgetData(jsonData);
         };
-        reader.readAsArrayBuffer(file);
+        reader.readAsBinaryString(file);
     }
 
-    // Function to add a new category (either income or expense)
-    function addCategory(sectionId, categoryName, amount, amountClass, categoryArray) {
-        const section = document.getElementById(sectionId);
-        const newDiv = document.createElement('div');
-        newDiv.className = 'category';
-        const newInputCategory = document.createElement('input');
-        newInputCategory.type = 'text';
-        newInputCategory.value = categoryName;
-        const newInputAmount = document.createElement('input');
-        newInputAmount.type = 'number';
-        newInputAmount.className = amountClass;
-        newInputAmount.value = amount;
-        newDiv.appendChild(newInputCategory);
-        newDiv.appendChild(newInputAmount);
-        section.appendChild(newDiv);
-        categoryArray.push(newInputAmount);
-        newInputAmount.addEventListener('input', updateSummary);
+    // Function to parse and load the budget data from the uploaded file
+    function parseBudgetData(data) {
+        incomeCategories = [];
+        expenseCategories = [];
+
+        const incomeSection = document.getElementById('income-section');
+        const expenseSection = document.getElementById('expense-section');
+
+        incomeSection.innerHTML = '<h2>Income</h2>';
+        expenseSection.innerHTML = '<h2>Expenses</h2>';
+
+        data.forEach(row => {
+            if (row[0] === 'Income') {
+                const newDiv = document.createElement('div');
+                newDiv.className = 'category';
+                const newInputCategory = document.createElement('input');
+                newInputCategory.type = 'text';
+                newInputCategory.value = row[1];
+                const newInputAmount = document.createElement('input');
+                newInputAmount.type = 'number';
+                newInputAmount.className = 'income-amount';
+                newInputAmount.value = row[2];
+                newDiv.appendChild(newInputCategory);
+                newDiv.appendChild(newInputAmount);
+                incomeSection.appendChild(newDiv);
+                incomeCategories.push(newInputAmount);
+                newInputAmount.addEventListener('input', updateSummary);
+            } else if (row[0] === 'Expense') {
+                const newDiv = document.createElement('div');
+                newDiv.className = 'category';
+                const newInputCategory = document.createElement('input');
+                newInputCategory.type = 'text';
+                newInputCategory.value = row[1];
+                const newInputAmount = document.createElement('input');
+                newInputAmount.type = 'number';
+                newInputAmount.className = 'expense-amount';
+                newInputAmount.value = row[2];
+                newDiv.appendChild(newInputCategory);
+                newDiv.appendChild(newInputAmount);
+                expenseSection.appendChild(newDiv);
+                expenseCategories.push(newInputAmount);
+                newInputAmount.addEventListener('input', updateSummary);
+            }
+        });
+
+        updateSummary();
     }
 
-    // Event listener for file input change
     document.getElementById('file-input').addEventListener('change', handleFileUpload);
-
-    // Event listeners for add category buttons
     document.getElementById('add-income').addEventListener('click', addIncomeCategory);
     document.getElementById('add-expense').addEventListener('click', addExpenseCategory);
 
-    // Initial event listeners for income and expense inputs
     incomeCategories.forEach(input => input.addEventListener('input', updateSummary));
     expenseCategories.forEach(input => input.addEventListener('input', updateSummary));
 
-    // Initial summary update
     updateSummary();
 });
