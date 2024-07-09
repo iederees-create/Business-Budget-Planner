@@ -84,10 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const ctx = document.getElementById('line-chart').getContext('2d');
         const incomeData = incomeCategories.map(input => Number(input.value));
         const expenseData = expenseCategories.map(input => Number(input.value));
-        const incomeLabels = incomeCategories.map(input => input.previousElementSibling.value);
-        const expenseLabels = expenseCategories.map(input => input.previousElementSibling.value);
-        
-        const labels = [...new Set([...incomeLabels, ...expenseLabels])];
+        const labels = incomeCategories.map((_, index) => `Category ${index + 1}`);
         
         if (window.lineChart) {
             window.lineChart.destroy();
@@ -143,4 +140,94 @@ document.addEventListener('DOMContentLoaded', function() {
     expenseCategories.forEach(input => input.addEventListener('input', updateSummary));
 
     updateSummary();
+
+    // Product catalog data
+    const products = [
+        {
+            name: "Monthly Budget Planner",
+            description: "A comprehensive monthly budget planner to track income, expenses, and savings.",
+            features: "Income tracking, Expense tracking, Savings goal",
+            price: "$10",
+            url: "Link to Buy"
+        },
+        {
+            name: "Cash Flow Statement",
+            description: "Monitor the cash flow in and out of your business.",
+            features: "Cash inflow, Cash outflow, Net cash flow",
+            price: "$15",
+            url: "Link to Buy"
+        },
+        {
+            name: "Expense Tracker",
+            description: "Simple and accessible way to track daily expenses.",
+            features: "Expense logging, Categories, Summaries",
+            price: "$8",
+            url: "Link to Buy"
+        },
+        {
+            name: "Sales and Revenue Tracker",
+            description: "Track sales performance and revenue over time.",
+            features: "Sales logging, Revenue tracking, Trend analysis",
+            price: "$12",
+            url: "Link to Buy"
+        },
+        {
+            name: "Project Management Dashboard",
+            description: "Manage and track project progress, deadlines, and tasks.",
+            features: "Task tracking, Deadline management, Progress visualization",
+            price: "$20",
+            url: "Link to Buy"
+        },
+        {
+            name: "KPI Dashboard",
+            description: "Visual dashboard to track key performance indicators (KPIs) and metrics.",
+            features: "KPI visualization, Metrics tracking, Trend analysis",
+            price: "$18",
+            url: "Link to Buy"
+        },
+        {
+            name: "Inventory Management",
+            description: "Track inventory levels, purchases, and sales.",
+            features: "Stock levels, Purchases, Sales, Alerts for low stock",
+            price: "$14",
+            url: "Link to Buy"
+        },
+        {
+            name: "Marketing Campaign Tracker",
+            description: "Plan, execute, and track marketing campaigns.",
+            features: "Campaign planning, Performance tracking, Analytics",
+            price: "$16",
+            url: "Link to Buy"
+        },
+        {
+            name: "CRM Template",
+            description: "Manage customer information, interactions, and sales pipelines.",
+            features: "Customer data, Interaction logging, Sales pipeline",
+            price: "$22",
+            url: "Link to Buy"
+        },
+        {
+            name: "Employee Timesheet",
+            description: "Log working hours and manage payroll.",
+            features: "Hour logging, Overtime calculation, Payroll management",
+            price: "$10",
+            url: "Link to Buy"
+        }
+    ];
+
+    // Populate product catalog
+    const productTableBody = document.getElementById('product-table-body');
+    if (productTableBody) {
+        products.forEach(product => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${product.name}</td>
+                <td>${product.description}</td>
+                <td>${product.features}</td>
+                <td>${product.price}</td>
+                <td><a href="${product.url}">Download/Buy</a></td>
+            `;
+            productTableBody.appendChild(row);
+        });
+    }
 });
