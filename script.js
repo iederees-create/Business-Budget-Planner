@@ -133,11 +133,60 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Function to handle file upload
+    function handleFileUpload(event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            const sheet = workbook.Sheets['Budget Data'];
+            const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+            rows.slice(1).forEach(row => {
+                const [categoryType, categoryName, amount] = row;
+                if (categoryType === 'Income') {
+                    addCategory('income-section', categoryName, amount, 'income-amount', incomeCategories);
+                } else if (categoryType === 'Expense') {
+                    addCategory('expense-section', categoryName, amount, 'expense-amount', expenseCategories);
+                }
+            });
+
+            updateSummary();
+        };
+        reader.readAsArrayBuffer(file);
+    }
+
+    // Function to add a new category (either income or expense)
+    function addCategory(sectionId, categoryName, amount, amountClass, categoryArray) {
+        const section = document.getElementById(sectionId);
+        const newDiv = document.createElement('div');
+        newDiv.className = 'category';
+        const newInputCategory = document.createElement('input');
+        newInputCategory.type = 'text';
+        newInputCategory.value = categoryName;
+        const newInputAmount = document.createElement('input');
+        newInputAmount.type = 'number';
+        newInputAmount.className = amountClass;
+        newInputAmount.value = amount;
+        newDiv.appendChild(newInputCategory);
+        newDiv.appendChild(newInputAmount);
+        section.appendChild(newDiv);
+        categoryArray.push(newInputAmount);
+        newInputAmount.addEventListener('input', updateSummary);
+    }
+
+    // Event listener for file input change
+    document.getElementById('file-input').addEventListener('change', handleFileUpload);
+
+    // Event listeners for add category buttons
     document.getElementById('add-income').addEventListener('click', addIncomeCategory);
     document.getElementById('add-expense').addEventListener('click', addExpenseCategory);
 
+    // Initial event listeners for income and expense inputs
     incomeCategories.forEach(input => input.addEventListener('input', updateSummary));
     expenseCategories.forEach(input => input.addEventListener('input', updateSummary));
 
+    // Initial summary update
     updateSummary();
 });
