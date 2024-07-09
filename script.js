@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize arrays with initial income and expense inputs
     const incomeInputs = document.querySelectorAll('.income-amount');
@@ -243,4 +242,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initial summary update
     updateSummary();
-});
+
+    // Floating WhatsApp icon
+    const whatsappIcon = document.createElement('a');
+    whatsappIcon.href = 'https://wa.me/27845272182?text=';
+   
