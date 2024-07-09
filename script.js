@@ -84,7 +84,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const ctx = document.getElementById('line-chart').getContext('2d');
         const incomeData = incomeCategories.map(input => Number(input.value));
         const expenseData = expenseCategories.map(input => Number(input.value));
-        const labels = incomeCategories.map((_, index) => `Category ${index + 1}`);
+        const incomeLabels = incomeCategories.map(input => input.previousElementSibling.value);
+        const expenseLabels = expenseCategories.map(input => input.previousElementSibling.value);
+        
+        const labels = [...new Set([...incomeLabels, ...expenseLabels])];
         
         if (window.lineChart) {
             window.lineChart.destroy();
