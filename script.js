@@ -133,78 +133,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Function to handle file upload and parse the budget data
-    function handleFileUpload(event) {
-        const file = event.target.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const data = e.target.result;
-            const workbook = XLSX.read(data, { type: 'binary' });
-            const sheetName = workbook.SheetNames[0];
-            const sheet = workbook.Sheets[sheetName];
-            const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-
-            parseBudgetData(jsonData);
-        };
-        reader.readAsBinaryString(file);
-    }
-
-    // Function to parse and load the budget data from the uploaded file
-    function parseBudgetData(data) {
-        incomeCategories = [];
-        expenseCategories = [];
-
-        const incomeSection = document.getElementById('income-section');
-        const expenseSection = document.getElementById('expense-section');
-
-        incomeSection.innerHTML = '<h2>Income</h2>';
-        expenseSection.innerHTML = '<h2>Expenses</h2>';
-
-        data.forEach(row => {
-            if (row[0] === 'Income') {
-                const newDiv = document.createElement('div');
-                newDiv.className = 'category';
-                const newInputCategory = document.createElement('input');
-                newInputCategory.type = 'text';
-                newInputCategory.value = row[1];
-                const newInputAmount = document.createElement('input');
-                newInputAmount.type = 'number';
-                newInputAmount.className = 'income-amount';
-                newInputAmount.value = row[2];
-                newDiv.appendChild(newInputCategory);
-                newDiv.appendChild(newInputAmount);
-                incomeSection.appendChild(newDiv);
-                incomeCategories.push(newInputAmount);
-                newInputAmount.addEventListener('input', updateSummary);
-            } else if (row[0] === 'Expense') {
-                const newDiv = document.createElement('div');
-                newDiv.className = 'category';
-                const newInputCategory = document.createElement('input');
-                newInputCategory.type = 'text';
-                newInputCategory.value = row[1];
-                const newInputAmount = document.createElement('input');
-                newInputAmount.type = 'number';
-                newInputAmount.className = 'expense-amount';
-                newInputAmount.value = row[2];
-                newDiv.appendChild(newInputCategory);
-                newDiv.appendChild(newInputAmount);
-                expenseSection.appendChild(newDiv);
-                expenseCategories.push(newInputAmount);
-                newInputAmount.addEventListener('input', updateSummary);
-            }
-        });
-
-        updateSummary();
-    }
-
-    document.getElementById('file-input').addEventListener('change', handleFileUpload);
+    // Event listeners for adding income and expense categories
     document.getElementById('add-income').addEventListener('click', addIncomeCategory);
     document.getElementById('add-expense').addEventListener('click', addExpenseCategory);
 
+    // Event listeners for input changes to update summary and charts
     incomeCategories.forEach(input => input.addEventListener('input', updateSummary));
     expenseCategories.forEach(input => input.addEventListener('input', updateSummary));
 
+    // Initial call to update summary and charts on page load
     updateSummary();
 });
