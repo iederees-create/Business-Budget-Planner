@@ -6,11 +6,10 @@
     <title>Business Budget Planner</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.17.0/dist/xlsx.full.min.js"></script>
 </head>
 <body>
     <div class="container">
-        <h1>Business Budget Planner (With sample data)</h1>
+        <h1>Business Budget Planner</h1>
 
         <div id="income-section" class="section">
             <h2>Income</h2>
@@ -101,11 +100,15 @@
             <canvas id="bar-chart"></canvas>
         </div>
 
-        <div class="section">
-            <h2>Upload Budget Data</h2>
-            <input type="file" id="file-input" accept=".xlsx, .xls, .csv">
+        <div class="file-upload">
+            <input type="file" id="file-input">
+            <label for="file-input">Upload Budget Data</label>
         </div>
     </div>
+
+    <a href="#" class="floating-upload">
+        <img src="https://static-00.iconduck.com/assets.00/ms-excel-icon-1024x1014-pg0ryoeb.png" alt="Upload Budget Data">
+    </a>
 
     <a href="https://wa.me/27845272182?text=" class="floating-whatsapp">
         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNllq3TpfLEthIYiXt8102pw9RsSG350iXphf6--q0MEMeXY0Rfv3iqVtZ7VngBtKchJw&usqp=CAU" alt="WhatsApp Chat">
