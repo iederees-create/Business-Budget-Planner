@@ -133,14 +133,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Event listeners for adding income and expense categories
     document.getElementById('add-income').addEventListener('click', addIncomeCategory);
     document.getElementById('add-expense').addEventListener('click', addExpenseCategory);
 
-    // Event listeners for input changes in income and expense categories
     incomeCategories.forEach(input => input.addEventListener('input', updateSummary));
     expenseCategories.forEach(input => input.addEventListener('input', updateSummary));
 
-    // Initial call to update summary and charts
     updateSummary();
 });
